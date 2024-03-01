@@ -51,44 +51,38 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      * a record with the same key as r is already in the dictionary.
      *
      * @param r
-     * @throws DictionaryException
+     * @throws birds.DictionaryException
      */
     @Override
     public void insert(BirdRecord r) throws DictionaryException {
-
-        //Node newNode = new Node(r);
-        int comparison;
-
-        if (r==null){
-            throw new DictionaryException("invalid record");
+        Node newNode = new Node(r);
+        if (root.isEmpty()) {
+            root = newNode;
+            return;
         }
-        if(root==null){
-            root=new Node(r);
-        }
-        else{
-            Node parent = null;
-            Node current = root;
-            while(current != null){
-                comparison = r.getDataKey().compareTo(current.getData().getDataKey());
-                if (comparison== -1){
-                    parent = current;
-                    current = current.getLeftChild();
-                } else if (comparison==1) {
-                    parent = current;
-                    current = current.getRightChild();
+
+        Node current = root;
+        Node parent = null;
+        while (true) {
+            parent = current;
+            int comparison = current.getData().getDataKey().compareTo(r.getDataKey());
+            if (comparison == 0) {
+                // A record with the same key already exists in the dictionary.
+                throw new DictionaryException("A record with the same key already exists in the dictionary.");
+            } else if (comparison > 0) {
+                current = current.getLeftChild();
+                if (current == null) {
+                    parent.setLeftChild(newNode);
+                    return;
                 }
-                else{
-                    throw new DictionaryException("Cannot add duplicate record");
+            } else {
+                current = current.getRightChild();
+                if (current == null) {
+                    parent.setRightChild(newNode);
+                    return;
                 }
             }
-            if(r.getDataKey().compareTo(parent.getData().getDataKey())==-1){
-                parent.setLeftChild(new Node(r));
-            }
-            else{
-                parent.setRightChild(new Node(r));
-            }
         }
-
     }
 
     /**
@@ -96,71 +90,13 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      * DictionaryException if the record is not in the dictionary.
      *
      * @param k
-     * @throws DictionaryException
+     * @throws birds.DictionaryException
      */
     @Override
     public void remove(DataKey k) throws DictionaryException {
-        if(isEmpty()){
-            throw new DictionaryException("Cant remove from empty tree");
-        }
-        if(k== null){
-            throw new DictionaryException("Invalid record ");
-        }
-        int comparison;
-        Node current = root;
-        Node parent = new Node();
-        while(current != null){
-            comparison = k.compareTo(current.getData().getDataKey());
-            if(comparison==0){  //matching key found
-                if(!current.hasLeftChild()){ //If left child empty
-                    if(parent.isEmpty()){ //If at root 
-                        root=current.getRightChild();
-                    } else if (current== parent.getLeftChild()) {
-                        parent.setLeftChild(current.getRightChild()); //Set parent leftChild = current right
-                    }
-                    else{
-                        parent.setRightChild(current.getRightChild());
-                    }
-                } else if (!current.hasRightChild()) {
-                    if(parent.isEmpty()){ //If at root
-                        root=current.getLeftChild(); //if right child empty
-                    } else if (current== parent.getLeftChild()) {
-                        parent.setLeftChild(current.getLeftChild());
-                    }
-                    else{
-                        parent.setRightChild(current.getLeftChild());
-                    }
-                }else {
-                    current=removeNodeWithTwoChildren(current); //Calls function to deal with 2 child nodes
-                }
-                return;
-            } else if (comparison==-1) {
-                parent=current;
-                current=current.getLeftChild();
-            }
-            else{
-                parent=current;
-                current=current.getRightChild();
-            }
-        }
+        // Write this method
     }
-    private Node removeNodeWithTwoChildren(Node current){
-        Node succesor = current.getRightChild();
-        while(succesor.getLeftChild() != null){
-            succesor=succesor.getLeftChild(); //Finds Successor
-        }
-        current.setData(succesor.getData()); //Overides current data
-        current.setRightChild(removeMin(current.getRightChild())); //Sets new right child to subtree with deleted duplicate
-        return current;
 
-    }
-    private Node removeMin(Node current){ //method for removing the duplicate
-        if(current.hasLeftChild()){
-            return current.getRightChild();
-        }
-        current.setLeftChild(removeMin(current.getLeftChild()));
-        return current;
-    }
     /**
      * Returns the successor of k (the record from the ordered dictionary with
      * smallest key larger than k); it returns null if the given key has no
@@ -168,29 +104,12 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      *
      * @param k
      * @return
-     * @throws DictionaryException
+     * @throws birds.DictionaryException
      */
     @Override
     public BirdRecord successor(DataKey k) throws DictionaryException{
-        if(isEmpty()){
-            throw new DictionaryException("Tree is empty");
-        }
-        if(k== null){
-            throw new DictionaryException("Invalid record ");
-        }
-        Node current =root;
-        int comparison;
-        BirdRecord succesor = null;
-        while(current != null){
-            comparison = k.compareTo(current.getData().getDataKey());
-            if(comparison==1){
-                succesor= new BirdRecord(current.getData().getDataKey());
-                current=current.getLeftChild();
-            }else{
-                current=current.getRightChild();
-            }
-        }
-        return succesor;
+        // Write this method
+        return null; // change this statement
     }
 
    
@@ -201,29 +120,12 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      *
      * @param k
      * @return
-     * @throws DictionaryException
+     * @throws birds.DictionaryException
      */
     @Override
     public BirdRecord predecessor(DataKey k) throws DictionaryException{
-        if(isEmpty()){
-            throw new DictionaryException("Tree is empty");
-        }
-        if(k== null){
-            throw new DictionaryException("Invalid record ");
-        }
-        Node current =root;
-        int comparison;
-        BirdRecord predecessor = null;
-        while(current != null){
-            comparison = k.compareTo(current.getData().getDataKey());
-            if(comparison==-1){
-                predecessor= new BirdRecord(current.getData().getDataKey());
-                current=current.getRightChild();
-            }else{
-                current=current.getLeftChild();
-            }
-        }
-        return predecessor;
+        // Write this method
+        return null; // change this statement
     }
 
     /**
