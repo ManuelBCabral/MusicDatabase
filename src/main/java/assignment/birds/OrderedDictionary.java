@@ -55,7 +55,40 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      */
     @Override
     public void insert(BirdRecord r) throws DictionaryException {
-        // Write this method
+
+        //Node newNode = new Node(r);
+        int comparison;
+
+        if (r==null){
+            throw new DictionaryException("invalid record");
+        }
+        if(root==null){
+            root=new Node(r);
+        }
+        else{
+            Node parent = null;
+            Node current = root;
+            while(current != null){
+                comparison = r.getDataKey().compareTo(current.getData().getDataKey());
+                if (comparison== -1){
+                    parent = current;
+                    current = current.getLeftChild();
+                } else if (comparison==1) {
+                    parent = current;
+                    current = current.getRightChild();
+                }
+                else{
+                    throw new DictionaryException("Cannot add duplicate record");
+                }
+            }
+            if(r.getDataKey().compareTo(parent.getData().getDataKey())==-1){
+                parent.setLeftChild(new Node(r));
+            }
+            else{
+                parent.setRightChild(new Node(r));
+            }
+        }
+
     }
 
     /**
@@ -67,7 +100,41 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      */
     @Override
     public void remove(DataKey k) throws DictionaryException {
-        // Write this method
+        if(root==null){
+            throw new DictionaryException("Cant remove from empty tree");
+        }
+        if(k== null){
+            throw new DictionaryException("Invalid record ");
+        }
+        int comparison;
+        Node current = root;
+        Node parent = new Node();
+        while(current != null){
+            comparison = k.compareTo(current.getData().getDataKey());
+            if(comparison==0){  //matching key found
+                if(!current.hasLeftChild()){ //If left child empty
+                    if(parent.isEmpty()){ //If at root 
+                        root=current.getRightChild();
+                    } else if (current== parent.getLeftChild()) {
+                        parent.setLeftChild(current.getRightChild());
+                    }
+                    else{
+                        parent.setRightChild(current.getRightChild());
+                    }
+                } else if (!current.hasRightChild()) {
+                    if(parent.isEmpty()){ //If at root
+                        root=current.getLeftChild(); //if right child empty
+                    } else if (current== parent.getLeftChild()) {
+                        parent.setLeftChild(current.getLeftChild());
+                    }
+                    else{
+                        parent.setRightChild(current.getLeftChild());
+                    }
+                }else {
+
+                }
+            }
+        }
     }
 
     /**
