@@ -9,16 +9,20 @@ public class DataKey {
 		this(null, 0);
 	}
         
-	public DataKey(String name, int size) {
-		birdName = name;
+	public DataKey(String name, int size)
+	{
 		birdSize = size;
+		birdName = name;
+
 	}
 
-	public String getBirdName() {
+	public String getBirdName()
+	{
 		return birdName;
 	}
 
-	public int getBirdSize() {
+	public int getBirdSize()
+	{
 		return birdSize;
 	}
 
@@ -29,14 +33,17 @@ public class DataKey {
 	public int compareTo(DataKey k) {
             if (this.getBirdSize() == k.getBirdSize()) {
                 int compare = this.birdName.compareTo(k.getBirdName());
-                if (compare == 0){
+                if (compare == 0)
+				{
                      return 0;
                 } 
-                else if (compare < 0) {
+                else if (compare < 0)
+				{
                     return -1;
                 }
             }
-            else if(this.getBirdSize() < k.getBirdSize()){
+            else if(this.getBirdSize() < k.getBirdSize())
+			{
                     return -1;
             }
             return 1;
