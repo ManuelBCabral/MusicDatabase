@@ -86,7 +86,7 @@ public class BirdsController implements Initializable {
         try {
             database.remove(key);
         } catch (DictionaryException ex) {
-            System.out.println("Error in delete "+ ex);
+            System.out.println("Error in delete " + ex);
         }
         if (database.isEmpty()) {
             this.BirdPortal.setVisible(false);
@@ -153,20 +153,60 @@ public class BirdsController implements Initializable {
         }
     }
 
-    public void first() {
-        // Write this method
+    public void first() { //When the user clicks the 'First' button, the application should display the bird information with smallest key in the database using the dictionary method smallest()
+        try {
+            bird = database.smallest();
+            showBird();
+        } catch (DictionaryException ex) {
+            displayAlert("No smallest bird in the database.");
+        }
     }
 
-    public void last() {
-        // Write this method
+    public void last() { //When the user clicks the 'Last' button, the application should display the bird information with largest key in the database using the dictionary method largest()
+        try {
+            bird = database.largest();
+            showBird();
+        } catch (DictionaryException ex) {
+            displayAlert("No last bird in the database.");
+        }
     }
 
-    public void next() {
-        // Write this method;
+    public void next() { //When the user clicks the 'Next' button, the application should display the bird information in the database that follows the current bird using the dictionary method successor()
+        if (bird == null) {
+            displayAlert("There are no next birds in the dictionary.");
+            return;
+        }
+
+        try {
+            BirdRecord nextBird = database.successor(bird.getDataKey());
+            if (nextBird != null) {
+                bird = nextBird;
+                showBird();
+            } else {
+                displayAlert("There is no next bird in the database.");
+            }
+        } catch (DictionaryException ex) {
+            displayAlert(ex.getMessage());
+        }
     }
 
     public void previous() {
-        // Write this method
+        if (bird == null) {
+            displayAlert("There are no next birds in the dictonary.");
+            return;
+        }
+
+        try {
+            BirdRecord nextBird = database.predecessor(bird.getDataKey());
+            if (nextBird != null) {
+                bird = nextBird;
+                showBird();
+            } else {
+                displayAlert("There is no next bird in the database.");
+            }
+        } catch (DictionaryException ex) {
+            displayAlert(ex.getMessage());
+        }// Write this method
     }
 
     public void play() {
