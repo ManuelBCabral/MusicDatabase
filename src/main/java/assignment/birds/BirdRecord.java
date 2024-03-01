@@ -16,6 +16,10 @@ public class BirdRecord {
         this(null, null, null, null);
     }
 
+    public BirdRecord(DataKey k){
+        key=k;
+    }
+
     public BirdRecord(DataKey k, String a, String s, String i) {
         key = k;
         about = a;
