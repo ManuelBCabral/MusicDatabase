@@ -94,7 +94,66 @@ public class OrderedDictionary implements OrderedDictionaryADT {
      */
     @Override
     public void remove(DataKey k) throws DictionaryException {
-        // Write this method
+        if(root==null){
+            throw new DictionaryException("Cant remove from empty tree");
+        }
+        if(k== null){
+            throw new DictionaryException("Invalid record ");
+        }
+        int comparison;
+        Node current = root;
+        Node parent = new Node();
+        while(current != null){
+            comparison = k.compareTo(current.getData().getDataKey());
+            if(comparison==0){  //matching key found
+                if(!current.hasLeftChild()){ //If left child empty
+                    if(parent.isEmpty()){ //If at root
+                        root=current.getRightChild();
+                    } else if (current== parent.getLeftChild()) {
+                        parent.setLeftChild(current.getRightChild()); //Set parent leftChild = current right
+                    }
+                    else{
+                        parent.setRightChild(current.getRightChild());
+                    }
+                } else if (!current.hasRightChild()) {
+                    if(parent.isEmpty()){ //If at root
+                        root=current.getLeftChild(); //if right child empty
+                    } else if (current== parent.getLeftChild()) {
+                        parent.setLeftChild(current.getLeftChild());
+                    }
+                    else{
+                        parent.setRightChild(current.getLeftChild());
+                    }
+                }else {
+                    current=removeNodeWithTwoChildren(current); //Calls function to deal with 2 child nodes
+                }
+                return;
+            } else if (comparison==-1) {
+                parent=current;
+                current=current.getLeftChild();
+            }
+            else{
+                parent=current;
+                current=current.getRightChild();
+            }
+        }
+    }
+    private Node removeNodeWithTwoChildren(Node current){
+        Node succesor = current.getRightChild();
+        while(succesor.getLeftChild() != null){
+            succesor=succesor.getLeftChild(); //Finds Successor
+        }
+        current.setData(succesor.getData()); //Overides current data
+        current.setRightChild(removeMin(current.getRightChild())); //Sets new right child to subtree with deleted duplicate
+        return current;
+
+    }
+    private Node removeMin(Node current){ //method for removing the duplicate
+        if(current.hasLeftChild()){
+            return current.getRightChild();
+        }
+        current.setLeftChild(removeMin(current.getLeftChild()));
+        return current;
     }
 
     /**
